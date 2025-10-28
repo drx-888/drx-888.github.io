@@ -1,7 +1,13 @@
 ---
-title: "Holy cow!"
+title: "Renxuan's website"
 ---
 
-### I have a webpage!
+## Welcome to My Personal Webpage!
 
-And I can put all kinds of stuff on it!
+Hello! I'm Renxuan Deng, a passionate student intersted in data science.
+
+## About Me
+
+I'm currently a student major in biostatistics.
+
+My interests include swimming and playing computer games, and I love playing the piano.
