@@ -1,0 +1,90 @@
+---
+title: "plotly"
+output: 
+  flexdashboard::flex_dashboard:
+    orientation: columns
+    vertical_layout: fill
+---
+
+```{r setup, include=FALSE}
+library(flexdashboard)
+library(plotly)
+library(tidyverse)
+```
+
+```{r}
+noaa_data <- read_csv("nynoaadat.csv") |>
+  mutate(
+    date = as.Date(date),
+    year = format(date, "%Y"),
+    month = format(date, "%b"),
+    tmax = as.numeric(tmax),
+    tmin = as.numeric(tmin),
+    prcp = as.numeric(prcp)
+  ) |>
+  filter(
+    !is.na(date),
+    !is.na(tmax),
+    !is.na(tmin)
+  ) |>
+  sample_n(2000)
+
+yearly_data <- noaa_data |>
+  group_by(year) |>
+  summarise(
+    avg_tmax = mean(tmax, na.rm = TRUE),
+    avg_tmin = mean(tmin, na.rm = TRUE)
+  ) |>
+  filter(!is.na(year))
+```
+
+Column {data-width=650}
+-----------------------------------------------------------------------
+
+### Temperature Scatter Plot
+
+```{r}
+scatter_ggplot <- 
+  noaa_data |>
+  ggplot(aes(x = tmax, y = prcp, color = tmin)) +
+  geom_point(alpha = 0.3) +
+  labs(title = "Temperature vs Precipitation", 
+       x = "Max Temperature (°F)", 
+       y = "Precipitation (inches)")
+
+ggplotly(scatter_ggplot)
+```
+
+Column {data-width=350}
+-----------------------------------------------------------------------
+
+### Temperature Bar Plot
+
+```{r}
+noaa_data |>
+  group_by(month) |>
+  summarise(avg_tmax = mean(tmax, na.rm = TRUE)) |>
+  plot_ly(x = ~month, y = ~avg_tmax, type = "bar", 
+          colors = "viridis") |>
+  layout(title = "Average Max Temperature by Month",
+         xaxis = list(title = "Month"),
+         yaxis = list(title = "Average Max Temp (°F)"))
+```
+
+### Temperature Box Plot
+
+```{r}
+box_ggplot <- 
+  noaa_data |>
+  ggplot(aes(x = month, y = tmax, fill = month)) +
+  geom_boxplot() +
+  labs(title = "Temperature Distribution by Month",
+       x = "Month",
+       y = "Max Temperature (°F)") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+ggplotly(box_ggplot)
+```
+
+Data source: NOAA weather dataset
+

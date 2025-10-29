@@ -5,10 +5,14 @@ navbar:
   right:
     - text: "Resume"
       href: about.html
+    - text: "Plotly"
+      href: plotly.html
     - icon: fa-envelope fa-lg
       href: mailto:<renxuandeng07@163.com>
     - icon: fa-github fa-lg
       href: http://github.com/drx-888/
+    - icon: fa-x-twitter fa-lg
+      href: https://x.com/drx_ciallo/
 output:
   html_document:
     theme: cerulean
